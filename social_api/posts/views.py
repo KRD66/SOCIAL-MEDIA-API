@@ -3,7 +3,7 @@ from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
@@ -65,3 +65,20 @@ class LoginView(APIView):
 
         token = get_tokens_for_user(user)
         return Response({'message': 'Login successful', 'token': token}, status=status.HTTP_200_OK)
+
+
+class LikePostView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]  # Only logged-in users can like/unlike
+
+    def post(self, request, pk):
+        post = Post.objects.get(pk=pk)
+        user = request.user
+
+        if user in post.likes.all():
+            post.likes.remove(user)  # Unlike
+            message = "Post unliked"
+        else:
+            post.likes.add(user)  # Like
+            message = "Post liked"
+
+        return Response({'message': message, 'likes_count': post.likes.count()}, status=status.HTTP_200_OK)
