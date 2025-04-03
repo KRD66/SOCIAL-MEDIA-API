@@ -21,3 +21,12 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment by {self.author.username} on {self.post.title}"
+
+class Profile(models.Model):
+    user = models.OneToOneField(User,on_delete=models.CASCADE,related_name="profile")
+    followers = models.ManyToManyField(User,  related_name="following",blank = True)
+    
+    def __str__(self):
+        return self.user.username
+    
+    from .views import LikePostView
