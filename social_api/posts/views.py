@@ -82,3 +82,31 @@ class LikePostView(generics.GenericAPIView):
             message = "Post liked"
 
         return Response({'message': message, 'likes_count': post.likes.count()}, status=status.HTTP_200_OK)
+    
+    
+    
+class FollowUnfollowView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, username):
+        try:
+            user_to_follow = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        if request.user == user_to_follow:
+            return Response({"error": "You cannot follow yourself"}, status=status.HTTP_400_BAD_REQUEST)
+
+        user_profile = request.user.profile
+        target_profile = user_to_follow.profile
+
+        if user_profile in target_profile.followers.all():
+            target_profile.followers.remove(request.user)
+            message = "Unfollowed successfully"
+        else:
+            target_profile.followers.add(request.user)
+            message = "Followed successfully"
+
+        return Response({"message": message, "followers_count": target_profile.followers.count()}, status=status.HTTP_200_OK)
+
+
