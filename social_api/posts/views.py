@@ -89,6 +89,7 @@ class FollowUnfollowView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, username):
+        from .models import Profile  # Import inside the function to avoid circular import
         try:
             user_to_follow = User.objects.get(username=username)
         except User.DoesNotExist:
