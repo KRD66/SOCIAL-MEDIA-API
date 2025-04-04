@@ -10,15 +10,21 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
-import os
-import csv
+import os, pymysql
 from pathlib import Path
-from decouple import config
+from decouple import config, Csv
+
+
+
+
+pymysql.install_as_MySQLdb()
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = config('SECRET_KEY', default='your_default_secret_key_here')
+
+print(os.getenv('SECRET_KEY'))
   # Load environment variables from a .env file
 
 
@@ -29,12 +35,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-uwa53o)&b2jw(kj9!7#nn+7o-h9n8nvupoh%de+zf)jzxm%0p7'
 
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=csv())  # Comma-separated list in .env
-
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())  # Comma-separated list in .env
+print(config('ALLOWED_HOSTS'))
 
 
 INSTALLED_APPS = [
