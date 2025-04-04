@@ -11,12 +11,14 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 import os
+import csv
 from pathlib import Path
+from decouple import config
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-
+DEBUG = config('DEBUG', default=False, cast=bool)
+SECRET_KEY = config('SECRET_KEY')
   # Load environment variables from a .env file
 
 
@@ -31,8 +33,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-uwa53o)&b2jw(kj9!7#nn+7o-h9n8nvupoh%de+zf)jzxm%0p7'
 
 
-
-ALLOWED_HOSTS = ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=csv())  # Comma-separated list in .env
 
 
 
@@ -81,11 +82,17 @@ WSGI_APPLICATION = 'social_api.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': config('DB_NAME', default='social_api_db'),
+        'USER': config('DB_USER', default='social_user'),
+        'PASSWORD': config('DB_PASSWORD', default='Korede123@66'),
+        'HOST': config('DB_HOST', default='localhost'),
+        'PORT': config('DB_PORT', default='3306'),
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        }
     }
 }
 

@@ -27,4 +27,21 @@ Features
  User Following System
 	•	Follow/unfollow other users
 	•	Count number of followers
-	•	Access following/followers list through profiles
+	•	Access following/followers list through   profiles
+
+
+ 🔐 Security & Production Hardening
+	•	JWT Authentication (stateless and secure)
+	•	Permissions: Only authors can edit/delete their own content
+	•	Rate limiting to prevent abuse
+	•	CORS support for cross-origin requests
+	•	Environment-based configuration using .env and python-decouple
+	•	Secure production settings:
+	•	DEBUG=False
+	•	Strict ALLOWED_HOSTS
+	•	HTTPS redirection (SECURE_SSL_REDIRECT)
+	•	XSS protection (SECURE_BROWSER_XSS_FILTER)
+	•	Clickjacking protection (X_FRAME_OPTIONS)
+	•	MIME sniffing protection (SECURE_CONTENT_TYPE_NOSNIFF)
+	•	Secure cookies (SESSION_COOKIE_SECURE, CSRF_COOKIE_SECURE)
+	•	HSTS (SECURE_HSTS_SECONDS, etc.)   
