@@ -1,4 +1,4 @@
-from rest_framework import generics,status
+from rest_framework import generics,status, permissions
 from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
 from rest_framework.views import APIView
@@ -9,20 +9,55 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 
 class PostListCreateView(generics.ListCreateAPIView):
-    queryset = Post.objects.all()
+    queryset = Post.objects.all().order_by('-created_at')
     serializer_class = PostSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 class PostDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    permission_classes = {permissions.IsAuthenticatedOrReadOnly}
+    def perform_update(self, serializer):
+        if self.request.user == self.get_object().author:
+            serializer.save()
+        else:
+            raise PermissionError("You can only edit your own posts.")
 
+    def perform_destroy(self, instance):
+        if self.request.user == instance.author:
+            instance.delete()
+        else:
+            raise PermissionError("You can only delete your own posts.")
 class CommentListCreateView(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    
+    def get_queryset(self):
+        return Comment.objects.filter(post_id=self.kwargs['post_id']).order_by('-created_at')
+
+    def perform_create(self, serializer):
+        post = Post.objects.get(pk=self.kwargs['post_id'])
+        serializer.save(author=self.request.user, post=post)
+
 
 class CommentDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    
+    def perform_update(self, serializer):
+        if self.request.user == self.get_object().author:
+            serializer.save()
+        else:
+            raise PermissionError("You can only edit your own comments.")
+
+    def perform_destroy(self, instance):
+        if self.request.user == instance.author:
+            instance.delete()
+        else:
+            raise PermissionError("You can only delete your own comments.")
+
 
 # Generate JWT Tokens for a user
 def get_tokens_for_user(user):
