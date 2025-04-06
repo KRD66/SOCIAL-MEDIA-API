@@ -45,3 +45,60 @@ Features
 	•	MIME sniffing protection (SECURE_CONTENT_TYPE_NOSNIFF)
 	•	Secure cookies (SESSION_COOKIE_SECURE, CSRF_COOKIE_SECURE)
 	•	HSTS (SECURE_HSTS_SECONDS, etc.)   
+
+
+
+
+	1. User Authentication Endpoints
+	•	Register (Create a new user)
+	•	POST /api/auth/register/
+	•	Login (Obtain JWT tokens)
+	•	POST /api/auth/login/
+	•	Logout (Revoke JWT tokens)
+	•	POST /api/auth/logout/
+	•	Token Refresh (Get new access token using refresh token)
+	•	POST /api/auth/token/refresh/
+
+2. User Profile Endpoints
+	•	Get Profile (View user profile)
+	•	GET /api/profiles/<username>/
+	•	Update Profile (Update user profile)
+	•	PUT /api/profiles/<username>/
+	•	Follow a User
+	•	POST /api/profiles/<username>/follow/
+	•	Unfollow a User
+	•	POST /api/profiles/<username>/unfollow/
+
+3. Post Endpoints
+	•	Create a Post
+	•	POST /api/posts/
+	•	View All Posts
+	•	GET /api/posts/
+	•	View a Single Post
+	•	GET /api/posts/<post_id>/
+	•	Update a Post
+	•	PUT /api/posts/<post_id>/
+	•	Delete a Post
+	•	DELETE /api/posts/<post_id>/
+
+4. Comment Endpoints
+	•	Add a Comment to a Post
+	•	POST /api/posts/<post_id>/comments/
+	•	View Comments for a Post
+	•	GET /api/posts/<post_id>/comments/
+	•	Update a Comment
+	•	PUT /api/posts/<post_id>/comments/<comment_id>/
+	•	Delete a Comment
+	•	DELETE /api/posts/<post_id>/comments/<comment_id>/
+
+5. Like Feature Endpoints
+	•	Like a Post
+	•	POST /api/posts/<post_id>/like/
+	•	Unlike a Post
+	•	POST /api/posts/<post_id>/unlike/
+
+6. Follow System Endpoints
+	•	Follow a User
+	•	POST /api/profiles/<username>/follow/
+	•	Unfollow a User
+	•	POST /api/profiles/<username>/unfollow/
