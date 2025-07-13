@@ -148,24 +148,3 @@ REST_FRAMEWORK = {
     ),
 }
 
-
-# Secure cookies
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-
-# Prevent content sniffing
-SECURE_CONTENT_TYPE_NOSNIFF = True
-
-# Enable browser XSS filtering
-SECURE_BROWSER_XSS_FILTER = True
-
-# Clickjacking protection
-X_FRAME_OPTIONS = 'DENY'
-
-# Redirect all HTTP to HTTPS
-SECURE_SSL_REDIRECT = True
-
-# Strict Transport Security
-SECURE_HSTS_SECONDS = 3600  # Increase in stages
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
