@@ -10,14 +10,17 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
-import os, pymysql
+import os
 from pathlib import Path
 from decouple import config, Csv
+from dotenv import load_dotenv
+
+# Locate the .env file in the root of your project (same as manage.py)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 
 
-
-pymysql.install_as_MySQLdb()
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -92,19 +95,19 @@ WSGI_APPLICATION = 'social_api.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': config('DB_NAME', default='social_api_db'),
-        'USER': config('DB_USER', default='social_user'),
-        'PASSWORD': config('DB_PASSWORD', default='Korede123@66'),
-        'HOST': config('DB_HOST', default='localhost'),
-        'PORT': config('DB_PORT', default='3306'),
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-        }
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME'),         # postgres
+        'USER': os.getenv('DB_USER'),         # postgres
+        'PASSWORD': os.getenv('DB_PASSWORD'), # your Supabase password
+        'HOST': os.getenv('DB_HOST'),         # db.abcdef.supabase.co
+        'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
+
 
 
 # Password validation
